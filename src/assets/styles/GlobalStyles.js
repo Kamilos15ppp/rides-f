@@ -8,6 +8,6 @@ export const GlobalStyle = createGlobalStyle`
   }
   
   body, a, button {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'PT Sans', sans-serif;
   }
 `;

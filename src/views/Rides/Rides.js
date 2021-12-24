@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useRides } from 'hooks/useRides';
+import { TableWrapper } from 'components/atoms/TableWrapper/TableWrapper';
 import RidesTable from 'components/molecules/RidesTable/RidesTable';
 import RidesModal from 'components/molecules/RidesModal/RidesModal';
-import { Wrapper } from './Rides.styles';
+import {
+  useDeleteRideMutation,
+  useGetRidesQuery,
+  useUpdateRideMutation,
+} from 'store';
+import { message } from 'antd';
 
 const Rides = () => {
-  const { getRides, updateRide, deleteRide } = useRides();
-  const [rides, setRides] = useState([]);
-  const [isTableLoading, setIsTableLoading] = useState(true);
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [rideInfo, setRideInfo] = useState({});
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const { data, isLoading } = useGetRidesQuery();
+  const [deleteRide, deleteRest] = useDeleteRideMutation();
+  const [updateRide, updateRest] = useUpdateRideMutation();
 
   const showInfoModal = (record) => {
     setIsInfoModalVisible(true);
@@ -23,6 +26,8 @@ const Rides = () => {
       direction: record.direction,
       first: record.first,
       last: record.last,
+      created: record.created_at,
+      updated: record.updated_at,
     });
   };
 
@@ -49,62 +54,18 @@ const Rides = () => {
     setRideInfo({});
   };
 
-  const loadRides = async () => {
-    const rides = await getRides();
-    if (rides) {
-      setRides(rides);
-      setIsTableLoading(false);
-    }
-  };
-
-  const saveRide = async ({ tabor, line, direction, first, last }) => {
-    const { id } = rideInfo;
-    setIsSaving(true);
-    setIsTableLoading(true);
-    const response = await updateRide({
-      id,
-      tabor,
-      line,
-      direction,
-      first,
-      last,
-    });
-    if (response) {
-      setRideInfo({});
-      setIsSaving(false);
-      handleEditCancel();
-      await loadRides();
-    } else {
-      setIsSaving(false);
-    }
-  };
-
-  const removeRide = async (id) => {
-    setIsDeleting(true);
-    setIsTableLoading(true);
-    const response = await deleteRide(id);
-    if (response) {
-      setRideInfo({});
-      setIsDeleting(false);
-      handleInfoCancel();
-      await loadRides();
-    } else {
-      setIsDeleting(false);
-    }
-  };
-
   const fields = [
     {
       name: ['tabor'],
       value: rideInfo.tabor,
     },
     {
-      name: ['direction'],
-      value: rideInfo.direction,
-    },
-    {
       name: ['line'],
       value: rideInfo.line,
+    },
+    {
+      name: ['direction'],
+      value: rideInfo.direction,
     },
     {
       name: ['first'],
@@ -116,12 +77,39 @@ const Rides = () => {
     },
   ];
 
+  const handleDeleteRide = (id) => {
+    deleteRide(id);
+    handleInfoCancel();
+  };
+
+  const handleUpdateRide = ({ tabor, line, direction, first, last }) => {
+    const { id } = rideInfo;
+    updateRide({ id, tabor, line, direction, first, last });
+    handleEditCancel();
+  };
+
   useEffect(() => {
-    (async () => await loadRides())();
-  }, []);
+    const { isSuccess, isError } = deleteRest;
+    if (isSuccess) {
+      message.success('Usunięto przejazd');
+    }
+    if (isError) {
+      message.error('Błąd podczas usuwania przejazdu');
+    }
+  }, [deleteRest.isSuccess, deleteRest.isError]);
+
+  useEffect(() => {
+    const { isSuccess, isError } = updateRest;
+    if (isSuccess) {
+      message.success('Zaktualizowano przejazd');
+    }
+    if (isError) {
+      message.error('Błąd podczas aktualizacji przejazdu');
+    }
+  }, [updateRest.isSuccess, updateRest.isError]);
 
   return (
-    <Wrapper>
+    <TableWrapper>
       <RidesModal
         rideInfo={rideInfo}
         title={'Szczegółowe informacje'}
@@ -130,8 +118,8 @@ const Rides = () => {
         isEditButton={true}
         showEditModal={showEditModal}
         isDeleteButton={true}
-        isDeleting={isDeleting}
-        removeRide={removeRide}
+        isDeleting={deleteRest.isLoading}
+        removeRide={handleDeleteRide}
         isSaveButton={false}
         fields={null}
       />
@@ -143,16 +131,16 @@ const Rides = () => {
         isEditButton={false}
         isDeleteButton={false}
         isSaveButton={true}
-        isSaving={isSaving}
-        saveRide={saveRide}
+        isSaving={updateRest.isLoading}
+        saveRide={handleUpdateRide}
         fields={fields}
       />
       <RidesTable
-        rides={rides}
-        isTableLoading={isTableLoading}
+        rides={data}
+        isTableLoading={isLoading}
         showInfoModal={showInfoModal}
       />
-    </Wrapper>
+    </TableWrapper>
   );
 };
 

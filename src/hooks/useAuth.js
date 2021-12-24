@@ -4,31 +4,33 @@ import { message } from 'antd';
 
 const AuthContext = React.createContext({});
 
-// const url = 'http://przejazdyapi.you2.pl/api';
-const url = 'http://localhost:8000/api';
+const url = 'https://przejazdy-api.you2.pl/api';
+// const url = 'http://localhost:8000/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const getUser = async (token) => {
+    try {
+      const response = await axios.get(`${url}/user`, {
+        headers: {
+          accept: 'application/json',
+          authorization: `Bearer ${token}`,
+        },
+      });
+      setIsLoading(false);
+      setUser(response.data);
+    } catch (e) {
+      message.error('Wystąpił błąd, spróbuj ponownie później');
+    }
+  };
+
   React.useEffect(() => {
     const token = localStorage.getItem('przejazdykm_token');
 
     if (token) {
-      (async () => {
-        try {
-          const response = await axios.get(`${url}/user`, {
-            headers: {
-              accept: 'application/json',
-              authorization: `Bearer ${token}`,
-            },
-          });
-          setIsLoading(false);
-          setUser(response.data);
-        } catch (e) {
-          message.error('Wystąpił błąd, spróbuj ponownie później');
-        }
-      })();
+      getUser(token);
     } else {
       setIsLoading(true);
     }
@@ -50,8 +52,12 @@ export const AuthProvider = ({ children }) => {
       );
       message.success('Zalogowano poprawnie');
       setIsLoading(false);
-      setUser(response.data);
+      // setUser(response.data);
       localStorage.setItem('przejazdykm_token', response.data.token);
+      const token = response.data.token;
+      if (token) {
+        await getUser(token);
+      }
       return true;
     } catch (e) {
       message.error('Niepoprawny email lub hasło');

@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
-import { useRides } from 'hooks/useRides';
+import React, { useEffect } from 'react';
+import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
 import RidesForm from 'components/molecules/RidesForm/RidesForm';
-import { Wrapper } from './AddRide.styles';
+import { useAddRideMutation } from 'store';
+import { message } from 'antd';
 
 const AddRide = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { postRide } = useRides();
+  const [addRide, rest] = useAddRideMutation();
 
-  const onFinish = async ({ tabor, line, direction, first, last }) => {
-    setIsLoading(true);
-    const response = await postRide({ tabor, line, direction, first, last });
-    if (response) {
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
+  useEffect(() => {
+    const { isSuccess, isError } = rest;
+    if (isSuccess) {
+      message.success('Dodano przejazd');
     }
+    if (isError) {
+      message.error('Błąd podczas dodawania przejazdu');
+    }
+  }, [rest.isSuccess, rest.isError]);
+
+  const handleAddRide = ({ tabor, line, direction, first, last }) => {
+    addRide({ tabor, line, direction, first, last });
   };
 
   return (
-    <Wrapper>
-      <RidesForm onFinish={onFinish} isLoading={isLoading} />
-    </Wrapper>
+    <FormWrapper>
+      <RidesForm onFinish={handleAddRide} isLoading={rest.isLoading} />
+    </FormWrapper>
   );
 };
 

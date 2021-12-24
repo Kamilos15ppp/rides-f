@@ -1,30 +1,33 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import MainTemplate from 'components/templates/MainTemplate/MainTemplate';
 import Rides from './Rides/Rides';
 import AddRide from './AddRide/AddRide';
+import Buses from './Vehicles/Buses/Buses';
+import Trams from './Vehicles/Trams/Trams';
+import Others from './Vehicles/Others/Others';
+import Ranking from './Ranking/Ranking';
+import Statement from './Statement/Statement';
+import AddUser from './AddUser/AddUser';
+import UsersManagement from './UserManagement/UsersManagement';
 import ChangePassword from './ChangePassword/ChangePassword';
-import Vehicles from './Vehicles/Vehicles';
 
 const AuthenticatedApp = () => {
+  const { pathname } = useLocation();
   return (
-    <MainTemplate>
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/rides" />
-        </Route>
-        <Route path="/rides">
-          <Rides />
-        </Route>
-        <Route path="/add">
-          <AddRide />
-        </Route>
-        <Route path="/change-password">
-          <ChangePassword />
-        </Route>
-        <Route path="/vehicles/:type">
-          <Vehicles />
-        </Route>
-      </Switch>
+    <MainTemplate urlPath={pathname}>
+      <Routes>
+        <Route path="/*" element={<Navigate to="/rides" />} />
+        <Route path="/rides" element={<Rides />} />
+        <Route path="/add" element={<AddRide />} />
+        <Route path="/vehicles/buses" element={<Buses />} />
+        <Route path="/vehicles/trams" element={<Trams />} />
+        <Route path="/vehicles/others" element={<Others />} />
+        <Route path="/ranking" element={<Ranking />} />
+        <Route path="/statement" element={<Statement />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/add-user" element={<AddUser />} />
+        <Route path="/users-management" element={<UsersManagement />} />
+      </Routes>
     </MainTemplate>
   );
 };

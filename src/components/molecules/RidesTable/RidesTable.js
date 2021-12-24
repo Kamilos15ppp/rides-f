@@ -32,16 +32,29 @@ const columns = [
 
 const RidesTable = ({ rides, isTableLoading = false, showInfoModal }) => {
   const data = rides
-    ? rides.map(({ id, tabor, line, direction, first, last }) => {
-        return {
-          key: id,
+    ? rides.map(
+        ({
+          id,
           tabor,
           line,
           direction,
           first,
           last,
-        };
-      })
+          created_at,
+          updated_at,
+        }) => {
+          return {
+            key: id,
+            tabor,
+            line,
+            direction,
+            first,
+            last,
+            created_at,
+            updated_at,
+          };
+        }
+      )
     : [];
 
   return (

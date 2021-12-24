@@ -4,7 +4,6 @@ import { useAuth } from 'hooks/useAuth';
 import { Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faClipboardList,
   faCarSide,
   faListUl,
   faPlusCircle,
@@ -13,16 +12,22 @@ import {
   faSubway,
   faBusAlt,
   faWarehouse,
-  faInfo,
+  faChartBar,
   faListOl,
   faUserAlt,
   faKey,
   faSignOutAlt,
+  faUserPlus,
+  faUsers,
+  faTable,
+  faArrowAltCircleLeft,
+  faArrowAltCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { Wrapper } from './Navigation.styles';
 
 const Navigation = () => {
   const auth = useAuth();
+  const isAdmin = auth.user.is_admin ? true : false;
   const { SubMenu } = Menu;
 
   return (
@@ -32,11 +37,11 @@ const Navigation = () => {
         theme="dark"
         inlineCollapsed={true}
         style={{ width: '46px' }}
-        defaultSelectedKeys={['1']}
+        // defaultSelectedKeys={['1']}
       >
         <SubMenu
           key="sub1"
-          icon={<FontAwesomeIcon icon={faClipboardList} />}
+          icon={<FontAwesomeIcon icon={faTable} />}
           title="Przejazdy"
         >
           <Menu.Item key="1" icon={<FontAwesomeIcon icon={faListUl} />}>
@@ -67,6 +72,11 @@ const Navigation = () => {
           <Menu.Item key="6" icon={<FontAwesomeIcon icon={faBusAlt} />}>
             <Link to="/vehicles/others">Inne</Link>
           </Menu.Item>
+          {/*{isAdmin ? (*/}
+          {/*  <Menu.Item key="14" icon={<FontAwesomeIcon icon={faBusAlt} />}>*/}
+          {/*    <Link to="/vehicles/others">Panel zarządzania</Link>*/}
+          {/*  </Menu.Item>*/}
+          {/*) : null}*/}
           <SubMenu
             disabled={true}
             key="sub3"
@@ -80,22 +90,14 @@ const Navigation = () => {
         </SubMenu>
         <SubMenu
           key="sub4"
-          icon={<FontAwesomeIcon icon={faInfo} />}
+          icon={<FontAwesomeIcon icon={faChartBar} />}
           title="Statystyki"
         >
-          <Menu.Item
-            disabled={true}
-            key="10"
-            icon={<FontAwesomeIcon icon={faListOl} />}
-          >
-            Ranking
+          <Menu.Item key="10" icon={<FontAwesomeIcon icon={faListOl} />}>
+            <Link to="/ranking">Ranking</Link>
           </Menu.Item>
-          <Menu.Item
-            disabled={true}
-            key="11"
-            icon={<FontAwesomeIcon icon={faListUl} />}
-          >
-            Zestawienie
+          <Menu.Item key="11" icon={<FontAwesomeIcon icon={faListUl} />}>
+            <Link to="/statement">Zestawienie</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -103,11 +105,21 @@ const Navigation = () => {
           icon={<FontAwesomeIcon icon={faUserAlt} />}
           title="Konto"
         >
-          <Menu.Item key="12" icon={<FontAwesomeIcon icon={faKey} />}>
+          {isAdmin ? (
+            <>
+              <Menu.Item key="12" icon={<FontAwesomeIcon icon={faUserPlus} />}>
+                <Link to="/add-user">Dodaj użytkownika</Link>
+              </Menu.Item>
+              <Menu.Item key="13" icon={<FontAwesomeIcon icon={faUsers} />}>
+                <Link to="/users-management">Użytkownicy</Link>
+              </Menu.Item>
+            </>
+          ) : null}
+          <Menu.Item key="14" icon={<FontAwesomeIcon icon={faKey} />}>
             <Link to="/change-password">Zmień hasło</Link>
           </Menu.Item>
           <Menu.Item
-            key="13"
+            key="15"
             icon={<FontAwesomeIcon icon={faSignOutAlt} />}
             as="a"
             onClick={auth.signOut}
@@ -115,6 +127,22 @@ const Navigation = () => {
             Wyloguj
           </Menu.Item>
         </SubMenu>
+        <Menu.Item
+          key="16"
+          icon={<FontAwesomeIcon icon={faArrowAltCircleRight} />}
+          as="a"
+          onClick={() => window.history.go(1)}
+        >
+          Naprzód
+        </Menu.Item>
+        <Menu.Item
+          key="17"
+          icon={<FontAwesomeIcon icon={faArrowAltCircleLeft} />}
+          as="a"
+          onClick={() => window.history.go(-1)}
+        >
+          Cofnij
+        </Menu.Item>
       </Menu>
     </Wrapper>
   );

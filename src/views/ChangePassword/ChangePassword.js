@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Wrapper } from './ChangePassword.styles';
-import ChangePasswordForm from 'components/molecules/ChangePasswordForm/ChangePasswordForm';
 import { useAuth } from 'hooks/useAuth';
+import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
+import ChangePasswordForm from 'components/molecules/ChangePasswordForm/ChangePasswordForm';
 
 const ChangePassword = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,9 +28,9 @@ const ChangePassword = () => {
   };
 
   return (
-    <Wrapper>
+    <FormWrapper>
       <ChangePasswordForm onFinish={onFinish} isLoading={isLoading} />
-    </Wrapper>
+    </FormWrapper>
   );
 };
 

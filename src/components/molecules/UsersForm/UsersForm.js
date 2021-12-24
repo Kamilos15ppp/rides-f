@@ -1,32 +1,28 @@
-import React, { useEffect } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import React, { useState } from 'react';
+import { Button, Form, Input, message, Select } from 'antd';
 import { AntdFormWrapper } from 'components/atoms/AntdFormWrapper/AntdFormWrapper';
 
-const ChangePasswordForm = ({ onFinish, isLoading = false }) => {
+const UsersForm = ({ onFinish, isLoading = false }) => {
+  const [adminOption, setAdminOption] = useState();
+  const [form] = Form.useForm();
+  const { Option } = Select;
   const onFinishFailed = (errorInfo) => {
     if (errorInfo) {
       message.error('Wprowadź poprawne dane');
     }
   };
 
-  const [form] = Form.useForm();
-
   const onReset = () => {
     form.resetFields();
   };
 
-  useEffect(() => {
-    const clearFieldsTimeout = setTimeout(() => {
-      onReset();
-    }, 1000);
-    return () => clearTimeout(clearFieldsTimeout);
-  }, [isLoading]);
+  const onChange = (adminOpt) => setAdminOption(adminOpt);
 
   return (
     <AntdFormWrapper>
       <Form
         form={form}
-        name="changePasswordForm"
+        name="usersForm"
         labelCol={{
           span: 8,
         }}
@@ -38,38 +34,72 @@ const ChangePasswordForm = ({ onFinish, isLoading = false }) => {
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          name="old_password"
+          name="name"
           rules={[
             {
               required: true,
-              message: 'Wprowadź stare hasło',
+              message: 'Wprowadź poprawny nick',
             },
           ]}
         >
-          <Input.Password placeholder="stare hasło" />
+          <Input placeholder="nick" />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: 'Wprowadź poprawny email',
+            },
+          ]}
+        >
+          <Input placeholder="email" />
         </Form.Item>
         <Form.Item
           name="password"
           rules={[
             {
               required: true,
-              message: 'Wprowadź nowe hasło',
+              message: 'Wprowadź poprawne hasło',
             },
           ]}
         >
-          <Input.Password placeholder="nowe hasło" />
+          <Input.Password placeholder="hasło" />
         </Form.Item>
         <Form.Item
           name="password_confirmation"
           rules={[
             {
               required: true,
-              message: 'Wprowadź ponownie nowe hasło',
+              message: 'Wprowadź ponownie hasło',
             },
           ]}
         >
-          <Input.Password placeholder="potwierdź hasło" />
+          <Input.Password placeholder="powtórz hasło" />
         </Form.Item>
+        <Form.Item
+          name="is_admin"
+          rules={[
+            {
+              required: true,
+              message: 'Wybierz poprawną opcję',
+            },
+          ]}
+        >
+          <Select
+            value={adminOption}
+            style={{
+              width: 100,
+              margin: '0 8px',
+            }}
+            onChange={onChange}
+            placeholder="admin"
+          >
+            <Option value="0">Nie</Option>
+            <Option value="1">Tak</Option>
+          </Select>
+        </Form.Item>
+
         <Form.Item
           wrapperCol={{
             offset: 8,
@@ -82,7 +112,7 @@ const ChangePasswordForm = ({ onFinish, isLoading = false }) => {
             loading={isLoading}
             shape="round"
           >
-            Potwierdź
+            Zapisz
           </Button>
         </Form.Item>
         <Form.Item
@@ -100,4 +130,4 @@ const ChangePasswordForm = ({ onFinish, isLoading = false }) => {
   );
 };
 
-export default ChangePasswordForm;
+export default UsersForm;

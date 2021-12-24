@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const AntdFormWrapper = styled.div`
   form {
     position: relative;
     display: flex;

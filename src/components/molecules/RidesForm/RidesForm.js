@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Form, Input, message } from 'antd';
-import { Wrapper } from './RidesForm.styles';
+import { AntdFormWrapper } from 'components/atoms/AntdFormWrapper/AntdFormWrapper';
 
 const RidesForm = ({
   fields = null,
@@ -25,7 +25,7 @@ const RidesForm = ({
   }, [fields]);
 
   return (
-    <Wrapper>
+    <AntdFormWrapper>
       <Form
         form={form}
         name="ridesForm"
@@ -127,7 +127,7 @@ const RidesForm = ({
           </Form.Item>
         )}
       </Form>
-    </Wrapper>
+    </AntdFormWrapper>
   );
 };
 

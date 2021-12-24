@@ -3,18 +3,18 @@ import { Button, Modal } from 'antd';
 import RidesForm from 'components/molecules/RidesForm/RidesForm';
 
 const RidesModal = ({
-  rideInfo,
-  title,
-  isModalVisible,
+  rideInfo = {},
+  title = '',
+  isModalVisible = false,
   onCancel,
-  isEditButton,
-  isDeleteButton,
+  isEditButton = false,
+  isDeleteButton = false,
   showEditModal,
-  isDeleting,
+  isDeleting = false,
   removeRide,
-  isSaving,
+  isSaving = false,
   saveRide,
-  fields,
+  fields = [],
 }) => {
   return (
     <Modal
@@ -51,12 +51,13 @@ const RidesModal = ({
     >
       {isEditButton && (
         <div>
-          <p>ID: {rideInfo.id}</p>
           <p>Taborowy: {rideInfo.tabor}</p>
           <p>Linia: {rideInfo.line}</p>
           <p>Kierunek: {rideInfo.direction}</p>
           <p>Początkowy: {rideInfo.first}</p>
           <p>Końcowy: {rideInfo.last}</p>
+          <p>Utworzono: {rideInfo.created}</p>
+          <p>Zaktualizowano: {rideInfo.updated}</p>
         </div>
       )}
       {!isEditButton && (

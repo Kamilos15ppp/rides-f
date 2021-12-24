@@ -5,21 +5,21 @@ import { StyledBackground } from './UnauthenticatedApp.styles';
 import { Spin } from 'antd';
 
 const UnauthenticatedApp = () => {
-  const [spin, setSpin] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
   const auth = useAuth();
   const onFinish = async ({ email, password }) => {
-    setSpin(true);
+    setIsSpinning(true);
     const response = await auth.signIn({ email, password });
-    if (!response) setSpin(false);
-    else if (response) setSpin(true);
+    if (!response) setIsSpinning(false);
+    else if (response) setIsSpinning(true);
   };
 
   useEffect(() => {
-    return () => setSpin(false);
+    return () => setIsSpinning(false);
   }, []);
 
   return (
-    <Spin spinning={spin}>
+    <Spin spinning={isSpinning}>
       <StyledBackground />
       <LoginForm onFinish={onFinish} />
     </Spin>
