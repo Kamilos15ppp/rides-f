@@ -16,8 +16,8 @@ export const AntdFormWrapper = styled.div`
     transform: translateX(-50%);
   }
 
-  input,
-  span {
-    border-radius: 30px;
-  }
+  //input,
+  //span {
+  //border-radius: 30px;
+  //}
 `;

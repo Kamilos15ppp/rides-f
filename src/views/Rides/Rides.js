@@ -8,6 +8,7 @@ import {
   useUpdateRideMutation,
 } from 'store';
 import { message } from 'antd';
+import { useAutocompletion } from 'hooks/useAutocompletion';
 
 const Rides = () => {
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
@@ -16,6 +17,7 @@ const Rides = () => {
   const { data, isLoading } = useGetRidesQuery();
   const [deleteRide, deleteRest] = useDeleteRideMutation();
   const [updateRide, updateRest] = useUpdateRideMutation();
+  const { fetchedLines, fetchedDirections, fetchedStops } = useAutocompletion();
 
   const showInfoModal = (record) => {
     setIsInfoModalVisible(true);
@@ -134,6 +136,9 @@ const Rides = () => {
         isSaving={updateRest.isLoading}
         saveRide={handleUpdateRide}
         fields={fields}
+        options1={fetchedLines}
+        options2={fetchedDirections}
+        options3={fetchedStops}
       />
       <RidesTable
         rides={data}

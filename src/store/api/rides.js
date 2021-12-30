@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: 'http://localhost:8000/api',
-  baseUrl: 'https://przejazdy-api.you2.pl/api',
+  baseUrl: process.env.REACT_APP_URL,
   prepareHeaders: (headers) => {
     const token = localStorage.getItem('przejazdykm_token');
 
@@ -55,6 +54,15 @@ export const ridesApi = createApi({
       query: () => 'stats/statement',
       providesTags: ['Statement'],
     }),
+    getAutocompleteLines: builder.query({
+      query: () => 'autocomplete/lines',
+    }),
+    getAutocompleteDirections: builder.query({
+      query: () => 'autocomplete/directions',
+    }),
+    getAutocompleteStops: builder.query({
+      query: () => 'autocomplete/stops',
+    }),
   }),
 });
 
@@ -65,4 +73,7 @@ export const {
   useUpdateRideMutation,
   useGetRankingQuery,
   useGetStatementQuery,
+  useGetAutocompleteLinesQuery,
+  useGetAutocompleteDirectionsQuery,
+  useGetAutocompleteStopsQuery,
 } = ridesApi;

@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { FormWrapper } from 'components/atoms/FormWrapper/FormWrapper';
 import RidesForm from 'components/molecules/RidesForm/RidesForm';
-import { useAddRideMutation } from 'store';
 import { message } from 'antd';
+import { useAddRideMutation } from 'store';
+import { useAutocompletion } from 'hooks/useAutocompletion';
 
 const AddRide = () => {
+  const { fetchedLines, fetchedDirections, fetchedStops } = useAutocompletion();
   const [addRide, rest] = useAddRideMutation();
 
   useEffect(() => {
@@ -23,7 +25,13 @@ const AddRide = () => {
 
   return (
     <FormWrapper>
-      <RidesForm onFinish={handleAddRide} isLoading={rest.isLoading} />
+      <RidesForm
+        options1={fetchedLines}
+        options2={fetchedDirections}
+        options3={fetchedStops}
+        onFinish={handleAddRide}
+        isLoading={rest.isLoading}
+      />
     </FormWrapper>
   );
 };

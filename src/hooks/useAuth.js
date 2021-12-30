@@ -4,12 +4,10 @@ import { message } from 'antd';
 
 const AuthContext = React.createContext({});
 
-const url = 'https://przejazdy-api.you2.pl/api';
-// const url = 'http://localhost:8000/api';
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const url = process.env.REACT_APP_URL;
 
   const getUser = async (token) => {
     try {

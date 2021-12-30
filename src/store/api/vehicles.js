@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: 'http://localhost:8000/api',
-  baseUrl: 'https://przejazdy-api.you2.pl/api',
+  baseUrl: process.env.REACT_APP_URL,
   prepareHeaders: (headers) => {
     const token = localStorage.getItem('przejazdykm_token');
 

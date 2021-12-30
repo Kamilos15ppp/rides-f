@@ -1,20 +1,23 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import { AutoComplete, Button, Form, Input, message } from 'antd';
 import { AntdFormWrapper } from 'components/atoms/AntdFormWrapper/AntdFormWrapper';
 
 const RidesForm = ({
   fields = null,
+  options1 = [],
+  options2 = [],
+  options3 = [],
   onFinish,
   isLoading = false,
   isEditing = false,
 }) => {
+  const [form] = Form.useForm();
+
   const onFinishFailed = (errorInfo) => {
     if (errorInfo) {
       message.error('Wprowadź poprawne dane');
     }
   };
-
-  const [form] = Form.useForm();
 
   const onReset = () => {
     form.resetFields();
@@ -61,7 +64,17 @@ const RidesForm = ({
             },
           ]}
         >
-          <Input placeholder="linia" />
+          <AutoComplete
+            options={options1}
+            style={{
+              width: 200,
+            }}
+            filterOption={(inputValue, option) =>
+              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
+            }
+            placeholder="linia"
+          />
         </Form.Item>
         <Form.Item
           name="direction"
@@ -73,7 +86,17 @@ const RidesForm = ({
             },
           ]}
         >
-          <Input placeholder="kierunek" />
+          <AutoComplete
+            options={options2}
+            style={{
+              width: 200,
+            }}
+            filterOption={(inputValue, option) =>
+              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
+            }
+            placeholder="kierunek"
+          />
         </Form.Item>
         <Form.Item
           name="first"
@@ -85,7 +108,17 @@ const RidesForm = ({
             },
           ]}
         >
-          <Input placeholder="przystanek początkowy" />
+          <AutoComplete
+            options={options3}
+            style={{
+              width: 200,
+            }}
+            filterOption={(inputValue, option) =>
+              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
+            }
+            placeholder="przystanek początkowy"
+          />
         </Form.Item>
         <Form.Item
           name="last"
@@ -97,7 +130,17 @@ const RidesForm = ({
             },
           ]}
         >
-          <Input placeholder="przystanek końcowy" />
+          <AutoComplete
+            options={options3}
+            style={{
+              width: 200,
+            }}
+            filterOption={(inputValue, option) =>
+              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
+            }
+            placeholder="przystanek końcowy"
+          />
         </Form.Item>
         <Form.Item
           wrapperCol={{

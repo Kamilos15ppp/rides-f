@@ -15,6 +15,9 @@ const RidesModal = ({
   isSaving = false,
   saveRide,
   fields = [],
+  options1 = [],
+  options2 = [],
+  options3 = [],
 }) => {
   return (
     <Modal
@@ -63,6 +66,9 @@ const RidesModal = ({
       {!isEditButton && (
         <div>
           <RidesForm
+            options1={options1}
+            options2={options2}
+            options3={options3}
             fields={fields}
             onFinish={saveRide}
             isLoading={isSaving}
