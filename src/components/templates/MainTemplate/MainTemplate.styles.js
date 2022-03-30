@@ -16,6 +16,7 @@ export const DarkBg = styled.div`
   height: 100%;
   min-height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
 `;
 
 export const PageWrapper = styled.div`

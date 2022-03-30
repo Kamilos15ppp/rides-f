@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form, Input, message } from 'antd';
 import { AntdFormWrapper } from 'components/atoms/AntdFormWrapper/AntdFormWrapper';
 
@@ -101,3 +102,8 @@ const ChangePasswordForm = ({ onFinish, isLoading = false }) => {
 };
 
 export default ChangePasswordForm;
+
+ChangePasswordForm.propTypes = {
+  onFinish: PropTypes.func,
+  isLoading: PropTypes.bool,
+};

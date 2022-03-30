@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import Navigation from 'components/organisms/Navigation/Navigation';
 import { DarkBg, PageWrapper, Wrapper } from './MainTemplate.styles';
 import {
@@ -9,7 +10,7 @@ import {
   RIDES,
   STATEMENT,
   TRAMS,
-} from './PathConstance';
+} from './helpers/PathConstance';
 import image1 from 'assets/images/rides-page1400.jpg';
 import image2 from 'assets/images/add-ride-page1400.jpg';
 import image3 from 'assets/images/buses-page1400.jpg';
@@ -18,8 +19,8 @@ import image5 from 'assets/images/others-page1400.jpg';
 import image6 from 'assets/images/ranking-page1400.jpg';
 import image7 from 'assets/images/statement-page1400.jpg';
 
-const MainTemplate = ({ urlPath, children }) => {
-  const [background, setBackground] = useState(null);
+const MainTemplate = ({ urlPath = '/rides', handleLogout, children }) => {
+  const [background, setBackground] = useState(urlPath);
   useEffect(() => {
     switch (urlPath) {
       case RIDES:
@@ -55,7 +56,7 @@ const MainTemplate = ({ urlPath, children }) => {
       }}
     >
       <DarkBg>
-        <Navigation />
+        <Navigation handleLogout={handleLogout} />
         <PageWrapper>{children}</PageWrapper>
       </DarkBg>
     </Wrapper>
@@ -63,3 +64,9 @@ const MainTemplate = ({ urlPath, children }) => {
 };
 
 export default MainTemplate;
+
+MainTemplate.propTypes = {
+  urlPath: PropTypes.string.isRequired,
+  handleLogout: PropTypes.func,
+  children: PropTypes.node.isRequired,
+};

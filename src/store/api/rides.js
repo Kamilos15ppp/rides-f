@@ -2,8 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.REACT_APP_URL,
-  prepareHeaders: (headers) => {
-    const token = localStorage.getItem('przejazdykm_token');
+  prepareHeaders: (headers, { getState }) => {
+    const token = getState().user.token;
+    // const token = localStorage.getItem('przejazdykm_token');
 
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
@@ -46,6 +47,13 @@ export const ridesApi = createApi({
       }),
       invalidatesTags: ['Rides', 'Ranking', 'Statement'],
     }),
+    searchRides: builder.mutation({
+      query: (body) => ({
+        url: `search?phrase=${body.phrase}&column=${body.column}&start=${body.start}&startDate=${body.startDate}&endDate=${body.endDate}&sort=${body.sort}&order=${body.order}`,
+        method: 'POST',
+        body,
+      }),
+    }),
     getRanking: builder.query({
       query: () => 'stats/ranking',
       providesTags: ['Ranking'],
@@ -71,6 +79,7 @@ export const {
   useAddRideMutation,
   useDeleteRideMutation,
   useUpdateRideMutation,
+  useSearchRidesMutation,
   useGetRankingQuery,
   useGetStatementQuery,
   useGetAutocompleteLinesQuery,

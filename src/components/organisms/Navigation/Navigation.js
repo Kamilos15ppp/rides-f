@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from 'hooks/useAuth';
-import { Menu } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGetActiveUsersMutation } from 'store/api/user';
+import { updateActiveUsers, updateActiveUsersNames } from 'store/userSlice';
+import { Button, Menu, Popover, Space, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCarSide,
@@ -24,11 +26,28 @@ import {
   faArrowAltCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { Wrapper } from './Navigation.styles';
+import PropTypes from 'prop-types';
 
-const Navigation = () => {
-  const auth = useAuth();
-  const isAdmin = auth.user.is_admin ? true : false;
+const { Text } = Typography;
+
+const Navigation = ({ handleLogout }) => {
+  const dispatch = useDispatch();
+  const isAdmin = useSelector((state) => state.user.isAdmin);
+  const [getActiveUsers] = useGetActiveUsersMutation();
+  const activeUsers = useSelector((state) => state.user.activeUsers);
+  const activeUsersNames = useSelector((state) => state.user.activeUsersNames);
+  const [isVisible, setIsVisible] = useState(false);
   const { SubMenu } = Menu;
+
+  const handleVisibleChange = () => {
+    setIsVisible((prev) => !prev);
+  };
+
+  // useEffect(() => {
+  //   getActiveUsers().then((res) => {
+  //     console.log(res.data.users_names);
+  //   });
+  // }, []);
 
   return (
     <Wrapper>
@@ -36,8 +55,7 @@ const Navigation = () => {
         mode="inline"
         theme="dark"
         inlineCollapsed={true}
-        style={{ width: '46px' }}
-        // defaultSelectedKeys={['1']}
+        style={{ width: '46px', borderRadius: '30px' }}
       >
         <SubMenu
           key="sub1"
@@ -50,12 +68,8 @@ const Navigation = () => {
           <Menu.Item key="2" icon={<FontAwesomeIcon icon={faPlusCircle} />}>
             <Link to="/add">Dodaj</Link>
           </Menu.Item>
-          <Menu.Item
-            disabled={true}
-            key="3"
-            icon={<FontAwesomeIcon icon={faSearch} />}
-          >
-            Szukaj
+          <Menu.Item key="3" icon={<FontAwesomeIcon icon={faSearch} />}>
+            <Link to="/search">Szukaj</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -72,11 +86,6 @@ const Navigation = () => {
           <Menu.Item key="6" icon={<FontAwesomeIcon icon={faBusAlt} />}>
             <Link to="/vehicles/others">Inne</Link>
           </Menu.Item>
-          {/*{isAdmin ? (*/}
-          {/*  <Menu.Item key="14" icon={<FontAwesomeIcon icon={faBusAlt} />}>*/}
-          {/*    <Link to="/vehicles/others">Panel zarządzania</Link>*/}
-          {/*  </Menu.Item>*/}
-          {/*) : null}*/}
           <SubMenu
             disabled={true}
             key="sub3"
@@ -122,7 +131,7 @@ const Navigation = () => {
             key="15"
             icon={<FontAwesomeIcon icon={faSignOutAlt} />}
             as="a"
-            onClick={auth.signOut}
+            onClick={handleLogout}
           >
             Wyloguj
           </Menu.Item>
@@ -144,8 +153,58 @@ const Navigation = () => {
           Cofnij
         </Menu.Item>
       </Menu>
+      <Popover
+        content={
+          <div style={{ textAlign: 'center' }}>
+            <Space size="small" direction="vertical">
+              {activeUsersNames &&
+                activeUsersNames.map((user) => (
+                  <Text key={user} type="warning">
+                    {user}
+                  </Text>
+                ))}
+              <Text type="success" strong={true}>
+                Ilość: {activeUsers}
+              </Text>
+              <Button
+                type="primary"
+                size="small"
+                shape="round"
+                onClick={() =>
+                  getActiveUsers().then((res) => {
+                    dispatch(updateActiveUsers(res.data));
+                    dispatch(updateActiveUsersNames(res.data));
+                  })
+                }
+              >
+                Odśwież
+              </Button>
+              <Button
+                size="small"
+                shape="round"
+                onClick={() => setIsVisible(false)}
+              >
+                Zamknij
+              </Button>
+            </Space>
+          </div>
+        }
+        title="Zalogowani użytkownicy"
+        placement="leftBottom"
+        trigger="click"
+        visible={isVisible}
+        onVisibleChange={handleVisibleChange}
+      >
+        <Button type="primary" shape="round">
+          {activeUsers}
+        </Button>
+      </Popover>
     </Wrapper>
   );
 };
 
 export default Navigation;
+
+Navigation.propTypes = {
+  handleLogout: PropTypes.func,
+};

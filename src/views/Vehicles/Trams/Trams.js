@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TableWrapper } from 'components/atoms/TableWrapper/TableWrapper';
-import VehiclesTable from 'components/molecules/VehicleTable/VehiclesTable';
+import CustomTable from 'components/molecules/CustomTable/CustomTable';
 import { useGetTramsQuery } from 'store';
+import { columns } from '../columns';
 
 const Trams = () => {
-  const { data, isLoading } = useGetTramsQuery();
+  const [data, setData] = useState(null);
+  const { data: trams, isLoading, isSuccess, isFetching } = useGetTramsQuery();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setData(
+        trams.map(({ id, tabor, producer, model }) => {
+          return {
+            key: id,
+            tabor,
+            producer,
+            model,
+          };
+        })
+      );
+    }
+  }, [isSuccess, isFetching]);
 
   return (
     <TableWrapper>
-      <VehiclesTable vehicles={data} isTableLoading={isLoading} />
+      <CustomTable
+        columns={columns}
+        fetchedData={data}
+        isTableLoading={isLoading}
+        scroll={{}}
+      />
     </TableWrapper>
   );
 };

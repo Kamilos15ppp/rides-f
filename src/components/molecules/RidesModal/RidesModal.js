@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal } from 'antd';
 import RidesForm from 'components/molecules/RidesForm/RidesForm';
 
@@ -81,3 +82,30 @@ const RidesModal = ({
 };
 
 export default RidesModal;
+
+RidesModal.propTypes = {
+  rideInfo: PropTypes.exact({
+    id: PropTypes.string,
+    tabor: PropTypes.string,
+    line: PropTypes.string,
+    direction: PropTypes.string,
+    first: PropTypes.string,
+    last: PropTypes.string,
+    created: PropTypes.string,
+    updated: PropTypes.string,
+  }),
+  title: PropTypes.string,
+  isModalVisible: PropTypes.bool,
+  onCancel: PropTypes.func,
+  isEditButton: PropTypes.bool,
+  isDeleteButton: PropTypes.bool,
+  showEditModal: PropTypes.func,
+  isDeleting: PropTypes.bool,
+  removeRide: PropTypes.func,
+  isSaving: PropTypes.bool,
+  saveRide: PropTypes.func,
+  fields: PropTypes.array,
+  options1: PropTypes.array,
+  options2: PropTypes.array,
+  options3: PropTypes.array,
+};

@@ -1,24 +1,37 @@
 import React from 'react';
-import { useAuth } from 'hooks/useAuth';
-import UnauthenticatedApp from './UnauthenticatedApp';
-import AuthenticatedApp from './AuthenticatedApp';
-import LoadingIndicator from 'components/molecules/LoadingIndicator/LoadingIndicator';
-import 'antd/dist/antd.dark.css';
+import { useDispatch, useSelector } from 'react-redux';
+import UnauthenticatedApp from './UnAuth/UnauthenticatedApp';
+import AuthenticatedApp from './Auth/AuthenticatedApp';
+import 'antd/dist/antd.dark.min.css';
+import { useGetActiveUsersMutation, useGetUserMutation } from 'store/api/user';
+import {
+  updateActiveUsers,
+  updateActiveUsersNames,
+  updateUserInfo,
+  updateUserToken,
+} from 'store/userSlice';
 
 const Root = () => {
-  const auth = useAuth();
+  const dispatch = useDispatch();
+  const isLogged = useSelector((state) => state.user.isLogged);
+  const [getUser] = useGetUserMutation();
+  const [getActiveUsers] = useGetActiveUsersMutation();
 
-  return (
-    <>
-      {auth.user ? (
-        <AuthenticatedApp />
-      ) : auth.isLoading ? (
-        <UnauthenticatedApp />
-      ) : (
-        <LoadingIndicator />
-      )}
-    </>
-  );
+  React.useEffect(() => {
+    if (isLogged === false) {
+      const token = localStorage.getItem('przejazdykm_token');
+      if (token) {
+        dispatch(updateUserToken({ token }));
+        getUser().then((res) => dispatch(updateUserInfo(res.data)));
+        getActiveUsers().then((res) => {
+          dispatch(updateActiveUsers(res.data));
+          dispatch(updateActiveUsersNames(res.data));
+        });
+      }
+    }
+  }, [isLogged]);
+
+  return <>{isLogged ? <AuthenticatedApp /> : <UnauthenticatedApp />}</>;
 };
 
 export default Root;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form, Input, message } from 'antd';
 import { Wrapper } from './LoginForm.styles';
 
@@ -61,3 +62,7 @@ const LoginForm = ({ onFinish }) => {
 };
 
 export default LoginForm;
+
+LoginForm.propTypes = {
+  onFinish: PropTypes.func,
+};

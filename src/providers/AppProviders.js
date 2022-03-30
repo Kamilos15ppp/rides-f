@@ -1,21 +1,28 @@
 import React from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { AuthProvider } from 'hooks/useAuth';
+import PropTypes from 'prop-types';
 import { store } from 'store';
 import { GlobalStyle } from 'assets/styles/GlobalStyles';
+import { ConfigProvider } from 'antd';
+import locale from 'antd/lib/locale/pl_PL';
+import 'moment/locale/pl';
 
 const AppProviders = ({ children }) => {
   return (
     <Provider store={store}>
       <Router>
-        <AuthProvider>
+        <ConfigProvider locale={locale}>
           <GlobalStyle />
           {children}
-        </AuthProvider>
+        </ConfigProvider>
       </Router>
     </Provider>
   );
 };
 
 export default AppProviders;
+
+AppProviders.propTypes = {
+  children: PropTypes.node.isRequired,
+};

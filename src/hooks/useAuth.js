@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { message } from 'antd';
 
 const AuthContext = React.createContext({});
@@ -50,12 +51,8 @@ export const AuthProvider = ({ children }) => {
       );
       message.success('Zalogowano poprawnie');
       setIsLoading(false);
-      // setUser(response.data);
+      setUser(response.data.user);
       localStorage.setItem('przejazdykm_token', response.data.token);
-      const token = response.data.token;
-      if (token) {
-        await getUser(token);
-      }
       return true;
     } catch (e) {
       message.error('Niepoprawny email lub hasło');
@@ -124,6 +121,10 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => {

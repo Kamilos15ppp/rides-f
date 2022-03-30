@@ -1,6 +1,12 @@
-import React, { useEffect } from 'react';
-import { AutoComplete, Button, Form, Input, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { AutoComplete, Button, Form, Input, message, Switch } from 'antd';
 import { AntdFormWrapper } from 'components/atoms/AntdFormWrapper/AntdFormWrapper';
+import { useChangeUserHintsMutation } from 'store';
+import { useGetUserMutation } from 'store/api/user';
+import { updateUserInfo } from 'store/userSlice';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const RidesForm = ({
   fields = null,
@@ -11,6 +17,13 @@ const RidesForm = ({
   isLoading = false,
   isEditing = false,
 }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const userHints = useSelector((state) => state.user.isHint);
+  const [email, setEmail] = useState(null);
+  const [isSwitchLoading, setIsSwitchLoading] = useState(false);
+  const [changeUserHints, rest] = useChangeUserHintsMutation();
+  const [getUser] = useGetUserMutation();
   const [form] = Form.useForm();
 
   const onFinishFailed = (errorInfo) => {
@@ -23,6 +36,37 @@ const RidesForm = ({
     form.resetFields();
   };
 
+  const onHintsChange = () => {
+    setIsSwitchLoading(true);
+  };
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (email) {
+      const is_hint = userHints === 0 ? 1 : 0;
+      changeUserHints({ is_hint, email });
+    } else {
+      setEmail(user.email);
+    }
+    getUser().then((res) => dispatch(updateUserInfo(res.data)));
+  }, [isSwitchLoading]);
+
+  useEffect(() => {
+    const { isSuccess, isError } = rest;
+    if (isSuccess) {
+      setIsSwitchLoading(false);
+    }
+    if (isError) {
+      message.error('Coś poszło nie tak, spróbuj ponownie później');
+      setIsSwitchLoading(false);
+    }
+  }, [rest.isSuccess, rest.isError]);
+
   useEffect(() => {
     onReset();
   }, [fields]);
@@ -33,15 +77,24 @@ const RidesForm = ({
         form={form}
         name="ridesForm"
         labelCol={{
-          span: 8,
+          span: 20,
         }}
         wrapperCol={{
-          span: 16,
+          span: 25,
         }}
         size="default"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
+        <Form.Item label="Podpowiedzi">
+          <Switch
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+            defaultChecked={!!userHints}
+            loading={isSwitchLoading}
+            onChange={onHintsChange}
+          />
+        </Form.Item>
         <Form.Item
           name="tabor"
           initialValue={fields ? fields[0].value : ''}
@@ -64,17 +117,23 @@ const RidesForm = ({
             },
           ]}
         >
-          <AutoComplete
-            options={options1}
-            style={{
-              width: 200,
-            }}
-            filterOption={(inputValue, option) =>
-              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
-            placeholder="linia"
-          />
+          {userHints ? (
+            <AutoComplete
+              data-testid="line"
+              options={options1}
+              style={{
+                width: 180,
+                textAlign: 'left',
+              }}
+              filterOption={(inputValue, option) =>
+                option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                -1
+              }
+              placeholder="linia"
+            />
+          ) : (
+            <Input placeholder="linia" />
+          )}
         </Form.Item>
         <Form.Item
           name="direction"
@@ -86,17 +145,23 @@ const RidesForm = ({
             },
           ]}
         >
-          <AutoComplete
-            options={options2}
-            style={{
-              width: 200,
-            }}
-            filterOption={(inputValue, option) =>
-              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
-            placeholder="kierunek"
-          />
+          {userHints ? (
+            <AutoComplete
+              data-testid="direction"
+              options={options2}
+              style={{
+                width: 180,
+                textAlign: 'left',
+              }}
+              filterOption={(inputValue, option) =>
+                option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                -1
+              }
+              placeholder="kierunek"
+            />
+          ) : (
+            <Input placeholder="kierunek" />
+          )}
         </Form.Item>
         <Form.Item
           name="first"
@@ -108,17 +173,23 @@ const RidesForm = ({
             },
           ]}
         >
-          <AutoComplete
-            options={options3}
-            style={{
-              width: 200,
-            }}
-            filterOption={(inputValue, option) =>
-              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
-            placeholder="przystanek początkowy"
-          />
+          {userHints ? (
+            <AutoComplete
+              data-testid="first"
+              options={options3}
+              style={{
+                width: 180,
+                textAlign: 'left',
+              }}
+              filterOption={(inputValue, option) =>
+                option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                -1
+              }
+              placeholder="przystanek początkowy"
+            />
+          ) : (
+            <Input placeholder="przystanek początkowy" />
+          )}
         </Form.Item>
         <Form.Item
           name="last"
@@ -130,17 +201,23 @@ const RidesForm = ({
             },
           ]}
         >
-          <AutoComplete
-            options={options3}
-            style={{
-              width: 200,
-            }}
-            filterOption={(inputValue, option) =>
-              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
-            placeholder="przystanek końcowy"
-          />
+          {userHints ? (
+            <AutoComplete
+              data-testid="last"
+              options={options3}
+              style={{
+                width: 180,
+                textAlign: 'left',
+              }}
+              filterOption={(inputValue, option) =>
+                option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+                -1
+              }
+              placeholder="przystanek końcowy"
+            />
+          ) : (
+            <Input placeholder="przystanek końcowy" />
+          )}
         </Form.Item>
         <Form.Item
           wrapperCol={{
@@ -175,3 +252,13 @@ const RidesForm = ({
 };
 
 export default RidesForm;
+
+RidesForm.propTypes = {
+  fields: PropTypes.array,
+  options1: PropTypes.array,
+  options2: PropTypes.array,
+  options3: PropTypes.array,
+  onFinish: PropTypes.func,
+  isLoading: PropTypes.bool,
+  isEditing: PropTypes.bool,
+};

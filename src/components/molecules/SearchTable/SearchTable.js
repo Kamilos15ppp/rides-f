@@ -1,5 +1,8 @@
 import React from 'react';
-import { Table } from 'antd';
+import PropTypes from 'prop-types';
+import { Table, Typography } from 'antd';
+
+const { Text } = Typography;
 
 const columns = [
   {
@@ -28,9 +31,19 @@ const columns = [
     dataIndex: 'last',
     key: 'last',
   },
+  {
+    title: 'Utworzono',
+    dataIndex: 'created_at',
+    key: 'created_at',
+  },
+  {
+    title: 'Zaktualizowano',
+    dataIndex: 'updated_at',
+    key: 'updated_at',
+  },
 ];
 
-const RidesTable = ({ rides, isTableLoading = false, showInfoModal }) => {
+const SearchTable = ({ rides = [], total = 0, isTableLoading = false }) => {
   const data = rides
     ? rides.map(
         ({
@@ -57,6 +70,14 @@ const RidesTable = ({ rides, isTableLoading = false, showInfoModal }) => {
       )
     : [];
 
+  const footer = () => {
+    return (
+      <Text type="warning" strong={true}>
+        Łączna ilość rekordów: {total}
+      </Text>
+    );
+  };
+
   return (
     <>
       <Table
@@ -66,17 +87,17 @@ const RidesTable = ({ rides, isTableLoading = false, showInfoModal }) => {
         scroll={{ x: 500 }}
         size="middle"
         tableLayout="unset"
-        pagination={{ position: ['none', 'bottomCenter'] }}
-        onRow={(record) => {
-          return {
-            onClick: () => {
-              showInfoModal(record);
-            },
-          };
-        }}
+        pagination={false}
+        footer={footer}
       />
     </>
   );
 };
 
-export default RidesTable;
+export default SearchTable;
+
+SearchTable.propTypes = {
+  rides: PropTypes.array,
+  isTableLoading: PropTypes.bool,
+  showInfoModal: PropTypes.func,
+};

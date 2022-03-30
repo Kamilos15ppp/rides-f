@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy } from 'react';
 import { TableWrapper } from 'components/atoms/TableWrapper/TableWrapper';
-import RidesTable from 'components/molecules/RidesTable/RidesTable';
-import RidesModal from 'components/molecules/RidesModal/RidesModal';
 import {
   useDeleteRideMutation,
   useGetRidesQuery,
@@ -9,12 +7,22 @@ import {
 } from 'store';
 import { message } from 'antd';
 import { useAutocompletion } from 'hooks/useAutocompletion';
+import CustomTable from 'components/molecules/CustomTable/CustomTable';
+const RidesModal = lazy(() =>
+  import('components/molecules/RidesModal/RidesModal')
+);
 
 const Rides = () => {
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [data, setData] = useState(null);
   const [rideInfo, setRideInfo] = useState({});
-  const { data, isLoading } = useGetRidesQuery();
+  const {
+    data: vehicles,
+    isFetching,
+    isLoading,
+    isSuccess,
+  } = useGetRidesQuery();
   const [deleteRide, deleteRest] = useDeleteRideMutation();
   const [updateRide, updateRest] = useUpdateRideMutation();
   const { fetchedLines, fetchedDirections, fetchedStops } = useAutocompletion();
@@ -110,6 +118,65 @@ const Rides = () => {
     }
   }, [updateRest.isSuccess, updateRest.isError]);
 
+  useEffect(() => {
+    if (isSuccess) {
+      setData(
+        vehicles.map(
+          ({
+            id,
+            tabor,
+            line,
+            direction,
+            first,
+            last,
+            created_at,
+            updated_at,
+          }) => {
+            return {
+              key: id,
+              tabor,
+              line,
+              direction,
+              first,
+              last,
+              created_at,
+              updated_at,
+            };
+          }
+        )
+      );
+    }
+  }, [isSuccess, isFetching]);
+
+  const columns = [
+    {
+      title: 'Taborowy',
+      dataIndex: 'tabor',
+      key: 'tabor',
+      fixed: 'left',
+    },
+    {
+      title: 'Linia',
+      dataIndex: 'line',
+      key: 'line',
+    },
+    {
+      title: 'Kierunek',
+      dataIndex: 'direction',
+      key: 'direction',
+    },
+    {
+      title: 'Początkowy',
+      dataIndex: 'first',
+      key: 'first',
+    },
+    {
+      title: 'Końcowy',
+      dataIndex: 'last',
+      key: 'last',
+    },
+  ];
+
   return (
     <TableWrapper>
       <RidesModal
@@ -123,7 +190,6 @@ const Rides = () => {
         isDeleting={deleteRest.isLoading}
         removeRide={handleDeleteRide}
         isSaveButton={false}
-        fields={null}
       />
       <RidesModal
         rideInfo={rideInfo}
@@ -140,9 +206,11 @@ const Rides = () => {
         options2={fetchedDirections}
         options3={fetchedStops}
       />
-      <RidesTable
-        rides={data}
+      <CustomTable
+        columns={columns}
+        fetchedData={data}
         isTableLoading={isLoading}
+        onRow={true}
         showInfoModal={showInfoModal}
       />
     </TableWrapper>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form, Input, message, Select } from 'antd';
 import { AntdFormWrapper } from 'components/atoms/AntdFormWrapper/AntdFormWrapper';
 
@@ -131,3 +132,8 @@ const UsersForm = ({ onFinish, isLoading = false }) => {
 };
 
 export default UsersForm;
+
+UsersForm.propTypes = {
+  onFinish: PropTypes.func,
+  isLoading: PropTypes.bool,
+};
