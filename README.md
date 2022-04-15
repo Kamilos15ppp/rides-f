@@ -9,14 +9,5 @@ advanced searching records, statistics and rankings with charts, and also displa
 ## See the page
 You can see the website [here](https://rides.you2.pl/).
 
-## How to run app?
-
-Install all the dependencies:
-
-#### `npm install`
-
-Then run the project:
-
-#### `npm run start`
-
-Open [http://localhost:3000](http://localhost:3000) to view it.
+Login: mateusz@mateusz.pl\
+Password: 87654321
