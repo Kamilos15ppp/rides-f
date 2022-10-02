@@ -10,9 +10,7 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const RidesForm = ({
   fields = null,
-  options1 = [],
-  options2 = [],
-  options3 = [],
+  options = {},
   onFinish,
   isLoading = false,
   isEditing = false,
@@ -120,7 +118,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="line"
-              options={options1}
+              options={options.fetchedLines}
               style={{
                 width: 180,
                 textAlign: 'left',
@@ -148,7 +146,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="direction"
-              options={options2}
+              options={options.fetchedDirections}
               style={{
                 width: 180,
                 textAlign: 'left',
@@ -176,7 +174,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="first"
-              options={options3}
+              options={options.fetchedStops}
               style={{
                 width: 180,
                 textAlign: 'left',
@@ -204,7 +202,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="last"
-              options={options3}
+              options={options.fetchedStops}
               style={{
                 width: 180,
                 textAlign: 'left',
@@ -255,9 +253,7 @@ export default RidesForm;
 
 RidesForm.propTypes = {
   fields: PropTypes.array,
-  options1: PropTypes.array,
-  options2: PropTypes.array,
-  options3: PropTypes.array,
+  options: PropTypes.object,
   onFinish: PropTypes.func,
   isLoading: PropTypes.bool,
   isEditing: PropTypes.bool,

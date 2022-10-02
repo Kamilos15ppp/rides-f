@@ -1,35 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'antd';
 import RidesForm from 'components/molecules/RidesForm/RidesForm';
 
 const RidesModal = ({
+  variant = '',
   rideInfo = {},
-  title = '',
   isModalVisible = false,
   onCancel,
-  isEditButton = false,
-  isDeleteButton = false,
   showEditModal,
   isDeleting = false,
   removeRide,
   isSaving = false,
   saveRide,
   fields = [],
-  options1 = [],
-  options2 = [],
-  options3 = [],
+  options = {},
 }) => {
+  const [title, setTitle] = useState('');
+  const { tabor, line, direction, first, last, created, updated } = rideInfo;
+
+  useEffect(() => {
+    if (variant === 'info') {
+      setTitle('Szczegółowe informacje');
+    } else if (variant === 'edit') {
+      setTitle('Edytuj przejazd');
+    }
+  }, [variant]);
+
   return (
     <Modal
       title={title}
-      visible={isModalVisible}
+      open={isModalVisible}
       onCancel={onCancel}
       footer={[
         <Button key="close" shape="round" onClick={onCancel}>
           Zamknij
         </Button>,
-        isEditButton && (
+        variant === 'info' && (
           <Button
             key="edit"
             shape="round"
@@ -39,7 +46,7 @@ const RidesModal = ({
             Edytuj
           </Button>
         ),
-        isDeleteButton && (
+        variant === 'info' && (
           <Button
             key="delete"
             shape="round"
@@ -53,23 +60,21 @@ const RidesModal = ({
         ),
       ]}
     >
-      {isEditButton && (
+      {variant === 'info' && (
         <div>
-          <p>Taborowy: {rideInfo.tabor}</p>
-          <p>Linia: {rideInfo.line}</p>
-          <p>Kierunek: {rideInfo.direction}</p>
-          <p>Początkowy: {rideInfo.first}</p>
-          <p>Końcowy: {rideInfo.last}</p>
-          <p>Utworzono: {rideInfo.created}</p>
-          <p>Zaktualizowano: {rideInfo.updated}</p>
+          <p>Taborowy: {tabor}</p>
+          <p>Linia: {line}</p>
+          <p>Kierunek: {direction}</p>
+          <p>Początkowy: {first}</p>
+          <p>Końcowy: {last}</p>
+          <p>Utworzono: {created}</p>
+          <p>Zaktualizowano: {updated}</p>
         </div>
       )}
-      {!isEditButton && (
+      {variant === 'edit' && (
         <div>
           <RidesForm
-            options1={options1}
-            options2={options2}
-            options3={options3}
+            options={options}
             fields={fields}
             onFinish={saveRide}
             isLoading={isSaving}
@@ -84,6 +89,7 @@ const RidesModal = ({
 export default RidesModal;
 
 RidesModal.propTypes = {
+  variant: PropTypes.string,
   rideInfo: PropTypes.exact({
     id: PropTypes.string,
     tabor: PropTypes.string,
@@ -94,7 +100,6 @@ RidesModal.propTypes = {
     created: PropTypes.string,
     updated: PropTypes.string,
   }),
-  title: PropTypes.string,
   isModalVisible: PropTypes.bool,
   onCancel: PropTypes.func,
   isEditButton: PropTypes.bool,
@@ -105,7 +110,5 @@ RidesModal.propTypes = {
   isSaving: PropTypes.bool,
   saveRide: PropTypes.func,
   fields: PropTypes.array,
-  options1: PropTypes.array,
-  options2: PropTypes.array,
-  options3: PropTypes.array,
+  options: PropTypes.object,
 };

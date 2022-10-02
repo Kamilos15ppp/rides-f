@@ -6,7 +6,7 @@ import { useAddRideMutation } from 'store';
 import { useAutocompletion } from 'hooks/useAutocompletion';
 
 const AddRide = () => {
-  const { fetchedLines, fetchedDirections, fetchedStops } = useAutocompletion();
+  const options = useAutocompletion();
   const [addRide, rest] = useAddRideMutation();
 
   useEffect(() => {
@@ -26,9 +26,7 @@ const AddRide = () => {
   return (
     <FormWrapper>
       <RidesForm
-        options1={fetchedLines}
-        options2={fetchedDirections}
-        options3={fetchedStops}
+        options={options}
         onFinish={handleAddRide}
         isLoading={rest.isLoading}
       />

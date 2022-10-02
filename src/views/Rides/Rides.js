@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { TableWrapper } from 'components/atoms/TableWrapper/TableWrapper';
 import {
   useDeleteRideMutation,
@@ -6,10 +6,11 @@ import {
   useUpdateRideMutation,
 } from 'store';
 import { message } from 'antd';
-import { useAutocompletion } from 'hooks/useAutocompletion';
 import CustomTable from 'components/molecules/CustomTable/CustomTable';
-const RidesModal = lazy(() =>
-  import('components/molecules/RidesModal/RidesModal')
+import { columns } from './constance';
+
+const RidesModalGroup = lazy(() =>
+  import('../../components/molecules/RidesModalGroup/RidesModalGroup')
 );
 
 const Rides = () => {
@@ -25,7 +26,6 @@ const Rides = () => {
   } = useGetRidesQuery();
   const [deleteRide, deleteRest] = useDeleteRideMutation();
   const [updateRide, updateRest] = useUpdateRideMutation();
-  const { fetchedLines, fetchedDirections, fetchedStops } = useAutocompletion();
 
   const showInfoModal = (record) => {
     setIsInfoModalVisible(true);
@@ -64,29 +64,6 @@ const Rides = () => {
     setRideInfo({});
   };
 
-  const fields = [
-    {
-      name: ['tabor'],
-      value: rideInfo.tabor,
-    },
-    {
-      name: ['line'],
-      value: rideInfo.line,
-    },
-    {
-      name: ['direction'],
-      value: rideInfo.direction,
-    },
-    {
-      name: ['first'],
-      value: rideInfo.first,
-    },
-    {
-      name: ['last'],
-      value: rideInfo.last,
-    },
-  ];
-
   const handleDeleteRide = (id) => {
     deleteRide(id);
     handleInfoCancel();
@@ -96,6 +73,25 @@ const Rides = () => {
     const { id } = rideInfo;
     updateRide({ id, tabor, line, direction, first, last });
     handleEditCancel();
+  };
+
+  const modalObj = {
+    onCancel: {
+      info: handleInfoCancel,
+      edit: handleEditCancel,
+    },
+    isLoading: {
+      delete: deleteRest.isLoading,
+      update: updateRest.isLoading,
+    },
+    handlers: {
+      delete: handleDeleteRide,
+      update: handleUpdateRide,
+    },
+    modalVisibility: {
+      info: isInfoModalVisible,
+      edit: isEditModalVisible,
+    },
   };
 
   useEffect(() => {
@@ -148,63 +144,12 @@ const Rides = () => {
     }
   }, [isSuccess, isFetching]);
 
-  const columns = [
-    {
-      title: 'Taborowy',
-      dataIndex: 'tabor',
-      key: 'tabor',
-      fixed: 'left',
-    },
-    {
-      title: 'Linia',
-      dataIndex: 'line',
-      key: 'line',
-    },
-    {
-      title: 'Kierunek',
-      dataIndex: 'direction',
-      key: 'direction',
-    },
-    {
-      title: 'Początkowy',
-      dataIndex: 'first',
-      key: 'first',
-    },
-    {
-      title: 'Końcowy',
-      dataIndex: 'last',
-      key: 'last',
-    },
-  ];
-
   return (
     <TableWrapper>
-      <RidesModal
+      <RidesModalGroup
         rideInfo={rideInfo}
-        title={'Szczegółowe informacje'}
-        isModalVisible={isInfoModalVisible}
-        onCancel={handleInfoCancel}
-        isEditButton={true}
         showEditModal={showEditModal}
-        isDeleteButton={true}
-        isDeleting={deleteRest.isLoading}
-        removeRide={handleDeleteRide}
-        isSaveButton={false}
-      />
-      <RidesModal
-        rideInfo={rideInfo}
-        title={'Edytuj przejazd'}
-        isModalVisible={isEditModalVisible}
-        onCancel={handleEditCancel}
-        isEditButton={false}
-        isDeleteButton={false}
-        isSaveButton={true}
-        isSaving={updateRest.isLoading}
-        saveRide={handleUpdateRide}
-        fields={fields}
-        options1={fetchedLines}
-        options2={fetchedDirections}
-        options3={fetchedStops}
+        {...modalObj}
       />
       <CustomTable
         columns={columns}
