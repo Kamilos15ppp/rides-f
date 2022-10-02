@@ -14,6 +14,7 @@ const RidesForm = ({
   onFinish,
   isLoading = false,
   isEditing = false,
+  isReAdding = false,
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -23,6 +24,7 @@ const RidesForm = ({
   const [changeUserHints, rest] = useChangeUserHintsMutation();
   const [getUser] = useGetUserMutation();
   const [form] = Form.useForm();
+  const buttonVisibility = !isEditing && !isReAdding;
 
   const onFinishFailed = (errorInfo) => {
     if (errorInfo) {
@@ -235,10 +237,10 @@ const RidesForm = ({
             loading={isLoading}
             shape="round"
           >
-            Zapisz
+            {isReAdding ? 'Dodaj' : 'Zapisz'}
           </Button>
         </Form.Item>
-        {!isEditing && (
+        {buttonVisibility && (
           <Form.Item
             wrapperCol={{
               offset: 8,
@@ -255,7 +257,7 @@ const RidesForm = ({
             </Button>
           </Form.Item>
         )}
-        {!isEditing && (
+        {buttonVisibility && (
           <Form.Item
             wrapperCol={{
               offset: 8,
@@ -280,4 +282,5 @@ RidesForm.propTypes = {
   onFinish: PropTypes.func,
   isLoading: PropTypes.bool,
   isEditing: PropTypes.bool,
+  isReAdding: PropTypes.bool,
 };

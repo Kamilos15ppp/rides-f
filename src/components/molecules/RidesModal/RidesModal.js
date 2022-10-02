@@ -8,7 +8,7 @@ const RidesModal = ({
   rideInfo = {},
   isModalVisible = false,
   onCancel,
-  showEditModal,
+  showModal,
   isDeleting = false,
   removeRide,
   isSaving = false,
@@ -24,6 +24,8 @@ const RidesModal = ({
       setTitle('Szczegółowe informacje');
     } else if (variant === 'edit') {
       setTitle('Edytuj przejazd');
+    } else if (variant === 'reAdd') {
+      setTitle('Dodaj ponownie przejazd');
     }
   }, [variant]);
 
@@ -33,15 +35,22 @@ const RidesModal = ({
       open={isModalVisible}
       onCancel={onCancel}
       footer={[
-        <Button key="close" shape="round" onClick={onCancel}>
-          Zamknij
-        </Button>,
+        variant === 'info' && (
+          <Button
+            key="reAdd"
+            shape="round"
+            type="primary"
+            onClick={() => showModal.reAdd(rideInfo)}
+          >
+            Dodaj ponownie
+          </Button>
+        ),
         variant === 'info' && (
           <Button
             key="edit"
             shape="round"
             type="primary"
-            onClick={() => showEditModal(rideInfo)}
+            onClick={() => showModal.edit(rideInfo)}
           >
             Edytuj
           </Button>
@@ -82,6 +91,17 @@ const RidesModal = ({
           />
         </div>
       )}
+      {variant === 'reAdd' && (
+        <div>
+          <RidesForm
+            options={options}
+            fields={fields}
+            onFinish={saveRide}
+            isLoading={isSaving}
+            isReAdding={true}
+          />
+        </div>
+      )}
     </Modal>
   );
 };
@@ -104,7 +124,7 @@ RidesModal.propTypes = {
   onCancel: PropTypes.func,
   isEditButton: PropTypes.bool,
   isDeleteButton: PropTypes.bool,
-  showEditModal: PropTypes.func,
+  showModal: PropTypes.object,
   isDeleting: PropTypes.bool,
   removeRide: PropTypes.func,
   isSaving: PropTypes.bool,

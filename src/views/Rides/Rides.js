@@ -1,6 +1,7 @@
 import React, { lazy, useEffect, useState } from 'react';
 import { TableWrapper } from 'components/atoms/TableWrapper/TableWrapper';
 import {
+  useAddRideMutation,
   useDeleteRideMutation,
   useGetRidesQuery,
   useUpdateRideMutation,
@@ -16,6 +17,7 @@ const RidesModalGroup = lazy(() =>
 const Rides = () => {
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isReAddModalVisible, setIsReAddModalVisible] = useState(false);
   const [data, setData] = useState(null);
   const [rideInfo, setRideInfo] = useState({});
   const {
@@ -26,6 +28,7 @@ const Rides = () => {
   } = useGetRidesQuery();
   const [deleteRide, deleteRest] = useDeleteRideMutation();
   const [updateRide, updateRest] = useUpdateRideMutation();
+  const [addRide, addRest] = useAddRideMutation();
 
   const showInfoModal = (record) => {
     setIsInfoModalVisible(true);
@@ -54,6 +57,19 @@ const Rides = () => {
     });
   };
 
+  const showReAddModal = (ride) => {
+    setIsInfoModalVisible(false);
+    setIsReAddModalVisible(true);
+    setRideInfo({
+      id: ride.id,
+      tabor: ride.tabor,
+      line: ride.line,
+      direction: ride.direction,
+      first: ride.first,
+      last: ride.last,
+    });
+  };
+
   const handleInfoCancel = () => {
     setIsInfoModalVisible(false);
     setRideInfo({});
@@ -61,6 +77,11 @@ const Rides = () => {
 
   const handleEditCancel = () => {
     setIsEditModalVisible(false);
+    setRideInfo({});
+  };
+
+  const handleReAddCancel = () => {
+    setIsReAddModalVisible(false);
     setRideInfo({});
   };
 
@@ -75,22 +96,35 @@ const Rides = () => {
     handleEditCancel();
   };
 
+  const handleAddRide = ({ tabor, line, direction, first, last }) => {
+    addRide({ tabor, line, direction, first, last });
+    handleReAddCancel();
+  };
+
   const modalObj = {
     onCancel: {
       info: handleInfoCancel,
       edit: handleEditCancel,
+      reAdd: handleReAddCancel,
     },
     isLoading: {
       delete: deleteRest.isLoading,
       update: updateRest.isLoading,
+      add: addRest.isLoading,
     },
     handlers: {
       delete: handleDeleteRide,
       update: handleUpdateRide,
+      add: handleAddRide,
     },
     modalVisibility: {
       info: isInfoModalVisible,
       edit: isEditModalVisible,
+      reAdd: isReAddModalVisible,
+    },
+    showModal: {
+      edit: showEditModal,
+      reAdd: showReAddModal,
     },
   };
 
@@ -113,6 +147,16 @@ const Rides = () => {
       message.error('Błąd podczas aktualizacji przejazdu');
     }
   }, [updateRest.isSuccess, updateRest.isError]);
+
+  useEffect(() => {
+    const { isSuccess, isError } = addRest;
+    if (isSuccess) {
+      message.success('Dodano przejazd');
+    }
+    if (isError) {
+      message.error('Błąd podczas dodawania przejazdu');
+    }
+  }, [addRest.isSuccess, addRest.isError]);
 
   useEffect(() => {
     if (isSuccess) {

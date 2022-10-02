@@ -7,7 +7,7 @@ const RidesModalGroup = ({
   rideInfo,
   modalVisibility,
   onCancel,
-  showEditModal,
+  showModal,
   isLoading,
   handlers,
 }) => {
@@ -42,7 +42,7 @@ const RidesModalGroup = ({
         variant={'info'}
         isModalVisible={modalVisibility.info}
         onCancel={onCancel.info}
-        showEditModal={showEditModal}
+        showModal={showModal}
         isDeleting={isLoading.delete}
         removeRide={handlers.delete}
       />
@@ -53,6 +53,17 @@ const RidesModalGroup = ({
         onCancel={onCancel.edit}
         isSaving={isLoading.update}
         saveRide={handlers.update}
+        fields={fields}
+        options={options}
+      />
+      <RidesModal
+        rideInfo={rideInfo}
+        variant={'reAdd'}
+        isModalVisible={modalVisibility.reAdd}
+        onCancel={onCancel.reAdd}
+        showModal={showModal}
+        isSaving={isLoading.add}
+        saveRide={handlers.add}
         fields={fields}
         options={options}
       />
@@ -67,18 +78,26 @@ RidesModalGroup.propTypes = {
   modalVisibility: PropTypes.exact({
     info: PropTypes.bool,
     edit: PropTypes.bool,
+    reAdd: PropTypes.bool,
   }),
   onCancel: PropTypes.exact({
     info: PropTypes.func,
     edit: PropTypes.func,
+    reAdd: PropTypes.func,
   }),
   showEditModal: PropTypes.func,
   isLoading: PropTypes.exact({
     delete: PropTypes.bool,
     update: PropTypes.bool,
+    add: PropTypes.bool,
   }),
   handlers: PropTypes.exact({
     delete: PropTypes.func,
     update: PropTypes.func,
+    add: PropTypes.func,
+  }),
+  showModal: PropTypes.exact({
+    edit: PropTypes.func,
+    reAdd: PropTypes.func,
   }),
 };
