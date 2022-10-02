@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useGetActiveUsersMutation } from 'store/api/user';
-import { updateActiveUsers, updateActiveUsersNames } from 'store/userSlice';
-import { Button, Menu, Popover, Space, Typography } from 'antd';
+import { useSelector } from 'react-redux';
+import { Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCarSide,
@@ -28,26 +26,9 @@ import {
 import { Wrapper } from './Navigation.styles';
 import PropTypes from 'prop-types';
 
-const { Text } = Typography;
-
 const Navigation = ({ handleLogout }) => {
-  const dispatch = useDispatch();
   const isAdmin = useSelector((state) => state.user.isAdmin);
-  const [getActiveUsers] = useGetActiveUsersMutation();
-  const activeUsers = useSelector((state) => state.user.activeUsers);
-  const activeUsersNames = useSelector((state) => state.user.activeUsersNames);
-  const [isVisible, setIsVisible] = useState(false);
   const { SubMenu } = Menu;
-
-  const handleVisibleChange = () => {
-    setIsVisible((prev) => !prev);
-  };
-
-  // useEffect(() => {
-  //   getActiveUsers().then((res) => {
-  //     console.log(res.data.users_names);
-  //   });
-  // }, []);
 
   return (
     <Wrapper>
@@ -153,52 +134,6 @@ const Navigation = ({ handleLogout }) => {
           Cofnij
         </Menu.Item>
       </Menu>
-      <Popover
-        content={
-          <div style={{ textAlign: 'center' }}>
-            <Space size="small" direction="vertical">
-              {activeUsersNames &&
-                activeUsersNames.map((user) => (
-                  <Text key={user} type="warning">
-                    {user}
-                  </Text>
-                ))}
-              <Text type="success" strong={true}>
-                Ilość: {activeUsers}
-              </Text>
-              <Button
-                type="primary"
-                size="small"
-                shape="round"
-                onClick={() =>
-                  getActiveUsers().then((res) => {
-                    dispatch(updateActiveUsers(res.data));
-                    dispatch(updateActiveUsersNames(res.data));
-                  })
-                }
-              >
-                Odśwież
-              </Button>
-              <Button
-                size="small"
-                shape="round"
-                onClick={() => setIsVisible(false)}
-              >
-                Zamknij
-              </Button>
-            </Space>
-          </div>
-        }
-        title="Zalogowani użytkownicy"
-        placement="leftBottom"
-        trigger="click"
-        visible={isVisible}
-        onVisibleChange={handleVisibleChange}
-      >
-        <Button type="primary" shape="round">
-          {activeUsers}
-        </Button>
-      </Popover>
     </Wrapper>
   );
 };

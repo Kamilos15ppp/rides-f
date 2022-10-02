@@ -3,19 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import UnauthenticatedApp from './UnAuth/UnauthenticatedApp';
 import AuthenticatedApp from './Auth/AuthenticatedApp';
 import 'antd/dist/antd.dark.min.css';
-import { useGetActiveUsersMutation, useGetUserMutation } from 'store/api/user';
-import {
-  updateActiveUsers,
-  updateActiveUsersNames,
-  updateUserInfo,
-  updateUserToken,
-} from 'store/userSlice';
+import { useGetUserMutation } from 'store/api/user';
+import { updateUserInfo, updateUserToken } from 'store/userSlice';
 
 const Root = () => {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.user.isLogged);
   const [getUser] = useGetUserMutation();
-  const [getActiveUsers] = useGetActiveUsersMutation();
 
   React.useEffect(() => {
     if (isLogged === false) {
@@ -23,10 +17,6 @@ const Root = () => {
       if (token) {
         dispatch(updateUserToken({ token }));
         getUser().then((res) => dispatch(updateUserInfo(res.data)));
-        getActiveUsers().then((res) => {
-          dispatch(updateActiveUsers(res.data));
-          dispatch(updateActiveUsersNames(res.data));
-        });
       }
     }
   }, [isLogged]);

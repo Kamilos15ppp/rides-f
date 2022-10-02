@@ -45,12 +45,6 @@ export const userApi = createApi({
         body,
       }),
     }),
-    getActiveUsers: builder.mutation({
-      query: () => ({
-        url: 'active-users',
-        method: 'POST',
-      }),
-    }),
   }),
 });
 
@@ -59,5 +53,4 @@ export const {
   useLoginUserMutation,
   useLogoutUserMutation,
   useChangeUserPasswordMutation,
-  useGetActiveUsersMutation,
 } = userApi;

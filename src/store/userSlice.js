@@ -8,8 +8,6 @@ export const userSlice = createSlice({
     token: null,
     isAdmin: false,
     isHint: false,
-    activeUsers: null,
-    activeUsersNames: null,
   },
   reducers: {
     saveUserInfo: (state, action) => {
@@ -19,8 +17,6 @@ export const userSlice = createSlice({
       state.email = payload.user.email;
       state.isAdmin = payload.user.is_admin;
       state.isHint = payload.user.is_hint;
-      state.activeUsers = payload.active_users;
-      state.activeUsersNames = payload.users_names;
     },
     updateUserInfo: (state, action) => {
       const { payload } = action;
@@ -32,31 +28,17 @@ export const userSlice = createSlice({
       state.token = action.payload.token;
       state.isLogged = true;
     },
-    updateActiveUsers: (state, action) => {
-      state.activeUsers = action.payload.active_users;
-    },
-    updateActiveUsersNames: (state, action) => {
-      state.activeUsersNames = action.payload.users_names;
-    },
     clearUserInfo: (state) => {
       state.isLogged = false;
       state.email = null;
       state.token = null;
       state.isAdmin = false;
       state.isHint = false;
-      state.acticeUsers = null;
-      state.acticeUsersNames = null;
     },
   },
 });
 
-export const {
-  saveUserInfo,
-  updateUserInfo,
-  updateUserToken,
-  updateActiveUsers,
-  updateActiveUsersNames,
-  clearUserInfo,
-} = userSlice.actions;
+export const { saveUserInfo, updateUserInfo, updateUserToken, clearUserInfo } =
+  userSlice.actions;
 
 export default userSlice.reducer;
