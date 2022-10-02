@@ -38,6 +38,12 @@ const RidesForm = ({
     setIsSwitchLoading(true);
   };
 
+  const replaceStopsValues = () => {
+    const { first, last } = form.getFieldsValue();
+    form.setFieldValue('first', last);
+    form.setFieldValue('last', first);
+  };
+
   useEffect(() => {
     if (user) {
       setEmail(user.email);
@@ -232,6 +238,23 @@ const RidesForm = ({
             Zapisz
           </Button>
         </Form.Item>
+        {!isEditing && (
+          <Form.Item
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Button
+              type="primary"
+              htmlType="button"
+              onClick={replaceStopsValues}
+              shape="round"
+            >
+              Zamień przystanki
+            </Button>
+          </Form.Item>
+        )}
         {!isEditing && (
           <Form.Item
             wrapperCol={{
