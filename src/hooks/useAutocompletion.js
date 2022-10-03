@@ -1,57 +1,33 @@
 import { useEffect, useState } from 'react';
-import {
-  useGetAutocompleteDirectionsQuery,
-  useGetAutocompleteLinesQuery,
-  useGetAutocompleteStopsQuery,
-} from 'store';
+import { useGetAutocompleteQuery } from 'store';
 
 export const useAutocompletion = () => {
-  const { data: dataLines, isFetching: isLinesFetching } =
-    useGetAutocompleteLinesQuery();
-  const { data: dataDirections, isFetching: isDirectionsFetching } =
-    useGetAutocompleteDirectionsQuery();
-  const { data: dataStops, isFetching: isStopsFetching } =
-    useGetAutocompleteStopsQuery();
-  const [fetchedLines, setFetchedLines] = useState([]);
-  const [fetchedDirections, setFetchedDirections] = useState([]);
-  const [fetchedStops, setFetchedStops] = useState([]);
+  const { data: autocompleteData, isFetching } = useGetAutocompleteQuery();
+  const [fetchedAutocomplete, setFetchedAutocomplete] = useState({});
 
   useEffect(() => {
-    let arrayLines = [];
+    let autocompleteLines = [];
+    let autocompleteDirections = [];
+    let autocompleteStops = [];
 
-    if (dataLines) {
-      arrayLines = dataLines.map((item) => {
+    if (autocompleteData) {
+      autocompleteLines = autocompleteData.lines.map((item) => {
         return { value: item };
       });
-      setFetchedLines(arrayLines);
-    }
-  }, [isLinesFetching]);
-
-  useEffect(() => {
-    let arrayDirections = [];
-
-    if (dataDirections) {
-      arrayDirections = dataDirections.map((item) => {
+      autocompleteDirections = autocompleteData.directions.map((item) => {
         return { value: item };
       });
-      setFetchedDirections(arrayDirections);
-    }
-  }, [isDirectionsFetching]);
-
-  useEffect(() => {
-    let arrayStops = [];
-
-    if (dataStops) {
-      arrayStops = dataStops.map((item) => {
+      autocompleteStops = autocompleteData.stops.map((item) => {
         return { value: item };
       });
-      setFetchedStops(arrayStops);
-    }
-  }, [isStopsFetching]);
 
-  return {
-    fetchedLines,
-    fetchedDirections,
-    fetchedStops,
-  };
+      setFetchedAutocomplete({
+        lines: autocompleteLines,
+        directions: autocompleteDirections,
+        stops: autocompleteStops,
+      });
+    }
+  }, [isFetching]);
+
+  return fetchedAutocomplete;
 };

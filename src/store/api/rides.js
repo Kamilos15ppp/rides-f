@@ -62,14 +62,8 @@ export const ridesApi = createApi({
       query: () => 'stats/statement',
       providesTags: ['Statement'],
     }),
-    getAutocompleteLines: builder.query({
-      query: () => 'autocomplete/lines',
-    }),
-    getAutocompleteDirections: builder.query({
-      query: () => 'autocomplete/directions',
-    }),
-    getAutocompleteStops: builder.query({
-      query: () => 'autocomplete/stops',
+    getAutocomplete: builder.query({
+      query: () => 'autocomplete',
     }),
   }),
 });
@@ -82,7 +76,5 @@ export const {
   useSearchRidesMutation,
   useGetRankingQuery,
   useGetStatementQuery,
-  useGetAutocompleteLinesQuery,
-  useGetAutocompleteDirectionsQuery,
-  useGetAutocompleteStopsQuery,
+  useGetAutocompleteQuery,
 } = ridesApi;

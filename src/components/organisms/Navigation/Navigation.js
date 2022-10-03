@@ -67,16 +67,19 @@ const Navigation = ({ handleLogout }) => {
           <Menu.Item key="6" icon={<FontAwesomeIcon icon={faBusAlt} />}>
             <Link to="/vehicles/others">Inne</Link>
           </Menu.Item>
-          <SubMenu
-            disabled={true}
-            key="sub3"
-            title="Zajezdnie"
-            icon={<FontAwesomeIcon icon={faWarehouse} />}
-          >
-            <Menu.Item key="7">Zajezdnia 1</Menu.Item>
-            <Menu.Item key="8">Zajezdnia 2</Menu.Item>
-            <Menu.Item key="9">Zajezdnia 3</Menu.Item>
-          </SubMenu>
+          <Menu.Item key="7" icon={<FontAwesomeIcon icon={faWarehouse} />}>
+            <Link to="/vehicles/depots">Zajezdnie</Link>
+          </Menu.Item>
+          {/*<SubMenu*/}
+          {/*  // disabled={true}*/}
+          {/*  key="sub3"*/}
+          {/*  title="Zajezdnie"*/}
+          {/*  icon={<FontAwesomeIcon icon={faWarehouse} />}*/}
+          {/*>*/}
+          {/*  <Menu.Item key="7">Zajezdnia 1</Menu.Item>*/}
+          {/*  <Menu.Item key="8">Zajezdnia 2</Menu.Item>*/}
+          {/*  <Menu.Item key="9">Zajezdnia 3</Menu.Item>*/}
+          {/*</SubMenu>*/}
         </SubMenu>
         <SubMenu
           key="sub4"

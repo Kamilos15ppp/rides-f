@@ -25,6 +25,7 @@ const RidesForm = ({
   const [getUser] = useGetUserMutation();
   const [form] = Form.useForm();
   const buttonVisibility = !isEditing && !isReAdding;
+  const { lines, directions, stops } = options;
 
   const onFinishFailed = (errorInfo) => {
     if (errorInfo) {
@@ -126,7 +127,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="line"
-              options={options.fetchedLines}
+              options={lines}
               style={{
                 width: 180,
                 textAlign: 'left',
@@ -154,7 +155,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="direction"
-              options={options.fetchedDirections}
+              options={directions}
               style={{
                 width: 180,
                 textAlign: 'left',
@@ -182,7 +183,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="first"
-              options={options.fetchedStops}
+              options={stops}
               style={{
                 width: 180,
                 textAlign: 'left',
@@ -210,7 +211,7 @@ const RidesForm = ({
           {userHints ? (
             <AutoComplete
               data-testid="last"
-              options={options.fetchedStops}
+              options={stops}
               style={{
                 width: 180,
                 textAlign: 'left',
