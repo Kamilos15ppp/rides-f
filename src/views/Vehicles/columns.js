@@ -15,3 +15,16 @@ export const columns = [
     key: 'model',
   },
 ];
+
+export const columnsDepots = [
+  {
+    title: 'Model',
+    dataIndex: 'model',
+    key: 'model',
+  },
+  {
+    title: 'Suma',
+    dataIndex: 'sum',
+    key: 'sum',
+  },
+];

@@ -15,6 +15,7 @@ const Search = lazy(() => import('../Search/Search'));
 const Buses = lazy(() => import('../Vehicles/Buses/Buses'));
 const Trams = lazy(() => import('../Vehicles/Trams/Trams'));
 const Others = lazy(() => import('../Vehicles/Others/Others'));
+const Depots = lazy(() => import('../Vehicles/Depots/Depots'));
 const Ranking = lazy(() => import('../Ranking/Ranking'));
 const Statement = lazy(() => import('../Statement/Statement'));
 const ChangePassword = lazy(() => import('../ChangePassword/ChangePassword'));
@@ -47,6 +48,7 @@ const AuthenticatedApp = () => {
           <Route path="/vehicles/buses" element={<Buses />} />
           <Route path="/vehicles/trams" element={<Trams />} />
           <Route path="/vehicles/others" element={<Others />} />
+          <Route path="/vehicles/depots" element={<Depots />} />
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/statement" element={<Statement />} />
           <Route path="/change-password" element={<ChangePassword />} />

@@ -4,7 +4,6 @@ const baseQuery = fetchBaseQuery({
   baseUrl: process.env.REACT_APP_URL,
   prepareHeaders: (headers, { getState }) => {
     const token = getState().user.token;
-    // const token = localStorage.getItem('przejazdykm_token');
 
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
@@ -18,7 +17,7 @@ const baseQuery = fetchBaseQuery({
 export const vehiclesApi = createApi({
   reducerPath: 'vehiclesApi',
   baseQuery: baseQuery,
-  tagTypes: ['Buses', 'Trams', 'Others'],
+  tagTypes: ['Buses', 'Trams', 'Others', 'Depots'],
   endpoints: (builder) => ({
     getBuses: builder.query({
       query: () => 'vehicles/buses',
@@ -32,31 +31,16 @@ export const vehiclesApi = createApi({
       query: () => 'vehicles/others',
       providesTags: ['Others'],
     }),
-    // addRide: builder.mutation({
-    //   query: (body) => ({
-    //     url: 'rides',
-    //     method: 'POST',
-    //     body,
-    //   }),
-    //   invalidatesTags: ['Rides'],
-    // }),
-    // updateRide: builder.mutation({
-    //   query: (body) => ({
-    //     url: `rides/${body.id}`,
-    //     method: 'PUT',
-    //     body,
-    //   }),
-    //   invalidatesTags: ['Rides'],
-    // }),
-    // deleteRide: builder.mutation({
-    //   query: (id) => ({
-    //     url: `rides/${id}`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: ['Rides'],
-    // }),
+    getDepots: builder.query({
+      query: () => 'vehicles/depots',
+      providesTags: ['Depots'],
+    }),
   }),
 });
 
-export const { useGetBusesQuery, useGetTramsQuery, useGetOthersQuery } =
-  vehiclesApi;
+export const {
+  useGetBusesQuery,
+  useGetTramsQuery,
+  useGetOthersQuery,
+  useGetDepotsQuery,
+} = vehiclesApi;
