@@ -72,9 +72,14 @@ const Navigation = ({ handleLogout }) => {
             <Link to="/vehicles/depots">Zajezdnie</Link>
           </Menu.Item>
           {isAdmin ? (
-            <Menu.Item key="8" icon={<FontAwesomeIcon icon={faTrash} />}>
-              <Link to="/vehicles/all">Usuwanie</Link>
-            </Menu.Item>
+            <>
+              <Menu.Item key="9" icon={<FontAwesomeIcon icon={faPlusCircle} />}>
+                <Link to="/vehicles/add">Dodaj</Link>
+              </Menu.Item>
+              <Menu.Item key="8" icon={<FontAwesomeIcon icon={faTrash} />}>
+                <Link to="/vehicles/all">Usuń</Link>
+              </Menu.Item>
+            </>
           ) : null}
         </SubMenu>
         <SubMenu

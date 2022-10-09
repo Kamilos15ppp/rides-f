@@ -35,6 +35,14 @@ export const vehiclesApi = createApi({
       query: () => 'vehicles/all',
       providesTags: ['All'],
     }),
+    addVehicle: builder.mutation({
+      query: (body) => ({
+        url: 'vehicles',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Buses', 'Trams', 'Others', 'All'],
+    }),
     deleteVehicle: builder.mutation({
       query: (id) => ({
         url: `vehicles/${id}`,
@@ -54,6 +62,7 @@ export const {
   useGetTramsQuery,
   useGetOthersQuery,
   useGetAllVehiclesQuery,
+  useAddVehicleMutation,
   useDeleteVehicleMutation,
   useGetDepotsQuery,
 } = vehiclesApi;
