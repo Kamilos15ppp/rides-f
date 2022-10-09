@@ -11,9 +11,9 @@ const Buses = () => {
   useEffect(() => {
     if (isSuccess) {
       setData(
-        buses.map(({ id, tabor, producer, model }) => {
+        buses.map(({ ID, tabor, producer, model }) => {
           return {
-            key: id,
+            key: ID,
             tabor,
             producer,
             model,

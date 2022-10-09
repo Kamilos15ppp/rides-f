@@ -11,9 +11,9 @@ const Others = () => {
   useEffect(() => {
     if (isSuccess) {
       setData(
-        trams.map(({ id, tabor, producer, model }) => {
+        trams.map(({ ID, tabor, producer, model }) => {
           return {
-            key: id,
+            key: ID,
             tabor,
             producer,
             model,
