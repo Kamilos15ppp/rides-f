@@ -20,6 +20,7 @@ import {
   faUserPlus,
   faUsers,
   faTable,
+  faTrash,
   faArrowAltCircleLeft,
   faArrowAltCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
@@ -70,16 +71,11 @@ const Navigation = ({ handleLogout }) => {
           <Menu.Item key="7" icon={<FontAwesomeIcon icon={faWarehouse} />}>
             <Link to="/vehicles/depots">Zajezdnie</Link>
           </Menu.Item>
-          {/*<SubMenu*/}
-          {/*  // disabled={true}*/}
-          {/*  key="sub3"*/}
-          {/*  title="Zajezdnie"*/}
-          {/*  icon={<FontAwesomeIcon icon={faWarehouse} />}*/}
-          {/*>*/}
-          {/*  <Menu.Item key="7">Zajezdnia 1</Menu.Item>*/}
-          {/*  <Menu.Item key="8">Zajezdnia 2</Menu.Item>*/}
-          {/*  <Menu.Item key="9">Zajezdnia 3</Menu.Item>*/}
-          {/*</SubMenu>*/}
+          {isAdmin ? (
+            <Menu.Item key="8" icon={<FontAwesomeIcon icon={faTrash} />}>
+              <Link to="/vehicles/all">Usuwanie</Link>
+            </Menu.Item>
+          ) : null}
         </SubMenu>
         <SubMenu
           key="sub4"

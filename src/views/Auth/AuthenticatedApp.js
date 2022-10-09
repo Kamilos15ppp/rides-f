@@ -15,6 +15,7 @@ const Search = lazy(() => import('../Search/Search'));
 const Buses = lazy(() => import('../Vehicles/Buses/Buses'));
 const Trams = lazy(() => import('../Vehicles/Trams/Trams'));
 const Others = lazy(() => import('../Vehicles/Others/Others'));
+const All = lazy(() => import('../Vehicles/All/All'));
 const Depots = lazy(() => import('../Vehicles/Depots/Depots'));
 const Ranking = lazy(() => import('../Ranking/Ranking'));
 const Statement = lazy(() => import('../Statement/Statement'));
@@ -25,6 +26,7 @@ const UsersManagement = lazy(() => import('../UserManagement/UsersManagement'));
 const AuthenticatedApp = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
+  const isAdmin = useSelector((state) => state.user.isAdmin);
   const email = useSelector((state) => state.user.email);
   const [logoutUser, isSuccess] = useLogoutUserMutation();
 
@@ -52,8 +54,14 @@ const AuthenticatedApp = () => {
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/statement" element={<Statement />} />
           <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/add-user" element={<AddUser />} />
-          <Route path="/users-management" element={<UsersManagement />} />
+
+          {isAdmin && (
+            <>
+              <Route path="/vehicles/all" element={<All />} />
+              <Route path="/add-user" element={<AddUser />} />
+              <Route path="/users-management" element={<UsersManagement />} />
+            </>
+          )}
         </Routes>
       </Suspense>
     </MainTemplate>

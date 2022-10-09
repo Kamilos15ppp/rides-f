@@ -17,7 +17,7 @@ const baseQuery = fetchBaseQuery({
 export const vehiclesApi = createApi({
   reducerPath: 'vehiclesApi',
   baseQuery: baseQuery,
-  tagTypes: ['Buses', 'Trams', 'Others', 'Depots'],
+  tagTypes: ['Buses', 'Trams', 'Others', 'Depots', 'All'],
   endpoints: (builder) => ({
     getBuses: builder.query({
       query: () => 'vehicles/buses',
@@ -31,6 +31,17 @@ export const vehiclesApi = createApi({
       query: () => 'vehicles/others',
       providesTags: ['Others'],
     }),
+    getAllVehicles: builder.query({
+      query: () => 'vehicles/all',
+      providesTags: ['All'],
+    }),
+    deleteVehicle: builder.mutation({
+      query: (id) => ({
+        url: `vehicles/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Buses', 'Trams', 'Others', 'All'],
+    }),
     getDepots: builder.query({
       query: () => 'vehicles/depots',
       providesTags: ['Depots'],
@@ -42,5 +53,7 @@ export const {
   useGetBusesQuery,
   useGetTramsQuery,
   useGetOthersQuery,
+  useGetAllVehiclesQuery,
+  useDeleteVehicleMutation,
   useGetDepotsQuery,
 } = vehiclesApi;
