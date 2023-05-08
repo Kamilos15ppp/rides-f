@@ -226,18 +226,20 @@ const RidesForm = ({
             <Input placeholder="przystanek końcowy" />
           )}
         </Form.Item>
-        <Form.Item
-          name="date"
-          initialValue={fields[5] ? fields[5].value.slice(0, 10) : '2023-01-01'}
-          rules={[
-            {
-              required: true,
-              message: 'Wprowadź datę w formacie YYYY-MM-DD',
-            },
-          ]}
-        >
-          <Input placeholder="data YYYY-MM-DD" />
-        </Form.Item>
+        {isEditing ? (
+          <Form.Item
+            name="date"
+            initialValue={fields ? fields[5].value.slice(0, 10) : '2023-01-01'}
+            rules={[
+              {
+                required: true,
+                message: 'Wprowadź datę w formacie YYYY-MM-DD',
+              },
+            ]}
+          >
+            <Input placeholder="data YYYY-MM-DD" />
+          </Form.Item>
+        ) : null}
         <Form.Item
           wrapperCol={{
             offset: 8,
