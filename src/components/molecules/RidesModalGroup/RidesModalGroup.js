@@ -33,6 +33,10 @@ const RidesModalGroup = ({
       name: ['last'],
       value: rideInfo.last,
     },
+    {
+      name: ['created'],
+      value: rideInfo.created,
+    },
   ];
 
   return (

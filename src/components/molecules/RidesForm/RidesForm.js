@@ -227,6 +227,18 @@ const RidesForm = ({
           )}
         </Form.Item>
         <Form.Item
+          name="date"
+          initialValue={fields[5] ? fields[5].value.slice(0, 10) : '2023-01-01'}
+          rules={[
+            {
+              required: true,
+              message: 'Wprowadź datę w formacie YYYY-MM-DD',
+            },
+          ]}
+        >
+          <Input placeholder="data YYYY-MM-DD" />
+        </Form.Item>
+        <Form.Item
           wrapperCol={{
             offset: 8,
             span: 16,
@@ -241,23 +253,21 @@ const RidesForm = ({
             {isReAdding ? 'Dodaj' : 'Zapisz'}
           </Button>
         </Form.Item>
-        {buttonVisibility && (
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Button
+            type="primary"
+            htmlType="button"
+            onClick={replaceStopsValues}
+            shape="round"
           >
-            <Button
-              type="primary"
-              htmlType="button"
-              onClick={replaceStopsValues}
-              shape="round"
-            >
-              Zamień przystanki
-            </Button>
-          </Form.Item>
-        )}
+            Zamień przystanki
+          </Button>
+        </Form.Item>
         {buttonVisibility && (
           <Form.Item
             wrapperCol={{

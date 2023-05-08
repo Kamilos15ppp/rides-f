@@ -54,6 +54,7 @@ const Rides = () => {
       direction: ride.direction,
       first: ride.first,
       last: ride.last,
+      created: ride.created,
     });
   };
 
@@ -67,6 +68,7 @@ const Rides = () => {
       direction: ride.direction,
       first: ride.first,
       last: ride.last,
+      created: ride.created,
     });
   };
 
@@ -90,9 +92,10 @@ const Rides = () => {
     handleInfoCancel();
   };
 
-  const handleUpdateRide = ({ tabor, line, direction, first, last }) => {
-    const { id } = rideInfo;
-    updateRide({ id, tabor, line, direction, first, last });
+  const handleUpdateRide = ({ tabor, line, direction, first, last, date }) => {
+    const { id, created } = rideInfo;
+    const created_at = `${date} ${created.slice(10, 19)}`;
+    updateRide({ id, tabor, line, direction, first, last, created_at });
     handleEditCancel();
   };
 

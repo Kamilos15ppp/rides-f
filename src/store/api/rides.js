@@ -38,7 +38,7 @@ export const ridesApi = createApi({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Rides'],
+      invalidatesTags: ['Rides', 'Ranking', 'Statement'],
     }),
     deleteRide: builder.mutation({
       query: (id) => ({
